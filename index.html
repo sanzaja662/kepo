@@ -1,0 +1,73 @@
+<!doctype html>
+
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tulisan Bergerak - Merah di Latar Hitam</title>
+  <style>
+    :root{
+      --bg:#000000;       /* warna latar */
+      --text:#ff2b2b;      /* warna tulisan merah */
+      --speed:6s;         /* durasi animasi (lebih kecil = lebih cepat) */
+      --size:6vw;         /* ukuran font (responsif) */
+      --padding:2vh;      /* jarak vertikal */
+    }html,body{height:100%;margin:0}
+body{
+  background:var(--bg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing:antialiased;
+  color:var(--text);
+}
+
+/* wadah marquee */
+.marquee-wrap{
+  width:100%;
+  overflow:hidden; /* penting supaya teks menghilang saat keluar layar */
+  box-sizing:border-box;
+  padding:var(--padding) 0;
+}
+
+/* item tunggal yang bergeser dari kanan ke kiri lalu hilang */
+.marquee-item{
+  display:inline-block;
+  font-weight:700;
+  font-size:var(--size);
+  text-transform:uppercase;
+  letter-spacing:0.06em;
+  white-space:nowrap;
+  transform:translateX(100%); /* mulai dari kanan luar layar */
+  animation:slide var(--speed) linear infinite; /* forwards agar tetap pada posisi akhir (hilang) */
+  will-change:transform,opacity;
+  text-shadow:0 2px 8px rgba(0,0,0,0.6);
+}
+
+@keyframes slide{
+  0%{transform:translateX(100%);opacity:1}
+  100%{transform:translateX(-100%);opacity:1}
+}
+  80%{opacity:1}
+  100%{transform:translateX(-100%);opacity:0}
+}
+
+/* responsif: per kecil layar, naikkan ukuran font relatif */
+@media (max-width:420px){
+  :root{--size:10vw}
+}
+
+.container{max-width:1400px;padding:0 1rem}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Tulisan bergerak: akan bergeser dari kanan ke kiri lalu menghilang -->
+    <div class="marquee-wrap">
+      <div class="marquee-item">HIDUP JOKOWIIII</div>
+    </div>
+  </div>
+  --></body>
+</html>
