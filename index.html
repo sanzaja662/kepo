@@ -10,7 +10,7 @@
       --bg:#000000; /* hitam pekat */       /* warna latar */
       --text:#ff2b2b;      /* warna tulisan merah */
       --speed:3s; /* durasi 3 detik */         /* durasi animasi (lebih kecil = lebih cepat) */
-      --size:18vw; /* ukuran lebih besar */ /* diperlebar untuk ukuran HP */         /* ukuran font (responsif) */
+      --size:24vw; /* diperbesar lagi */ /* ukuran lebih besar */ /* diperlebar untuk ukuran HP */         /* ukuran font (responsif) */
       --padding:2vh;      /* jarak vertikal */
     }html,body{
   background:var(--bg);
@@ -64,7 +64,15 @@ body{
 }
 
 @keyframes slide{
-  0%{transform:translateY(100%);opacity:1}
+  0%{
+    transform:translate( -50%, 120% ); /* mulai dari bawah + agak ke kiri */
+    opacity:1;
+  }
+  100%{
+    transform:translate( 50%, -120% ); /* bergerak miring ke atas kanan */
+    opacity:1;
+  }
+}
   100%{transform:translateY(-100%);opacity:1}
 }
   100%{transform:translateY(-100%);opacity:1}
