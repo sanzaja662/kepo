@@ -4,33 +4,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Tulisan Bergerak - Merah di Latar Hitam</title>
+  <title>Tulisan Bergerak - Hitam Pekat &amp; Miring</title>
   <style>
     :root{
-      --bg:#000000; /* hitam pekat */       /* warna latar */
-      --text:#ff2b2b;      /* warna tulisan merah */
-      --speed:3s; /* durasi 3 detik */         /* durasi animasi (lebih kecil = lebih cepat) */
-      --size:24vw; /* diperbesar lagi */ /* ukuran lebih besar */ /* diperlebar untuk ukuran HP */         /* ukuran font (responsif) */
-      --padding:2vh;      /* jarak vertikal */
-    }html,body{
-  background:var(--bg);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-family:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  -webkit-font-smoothing:antialiased;
-  color:var(--text);
-  position:relative;
-}
-
-body::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:#000000; /* overlay hitam pekat */
-  opacity:1;
-  z-index:-1;
-}
+      --bg:#000000;        /* hitam pekat */
+      --text:#ff2b2b;       /* merah */
+      --speed:3s;          /* durasi total satu siklus */
+      --rise:30%;          /* proporsi durasi untuk fase naik */
+      --size:28vw;         /* ukuran font (besar untuk HP) */
+    }html,body{height:100%;margin:0}
 body{
   background:var(--bg);
   display:flex;
@@ -39,66 +21,86 @@ body{
   font-family:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   -webkit-font-smoothing:antialiased;
   color:var(--text);
+  position:relative;
+  overflow:hidden;
 }
 
-/* wadah marquee */
-.marquee-wrap{
-  width:100%;
-  overflow:hidden; /* penting supaya teks menghilang saat keluar layar */
-  box-sizing:border-box;
-  padding:var(--padding) 0;
+/* overlay hitam pekat memastikan kontras maksimal */
+body::before{
+  content:"";
+  position:absolute;inset:0;
+  background:#000;opacity:1;z-index:-1;
 }
 
-/* item tunggal yang bergeser dari kanan ke kiri lalu hilang */
-.marquee-item{
-  display:inline-block;
-  font-weight:700;
+.wrap{width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
+
+/* elemen teks tunggal yang menjalankan dua fase:
+   1) muncul dari bawah dan naik ke area tampilan (fase naik)
+   2) setelah naik, bergerak ke kiri melintas layar (fase horizontal)
+   animasi di-set infinite sehingga akan muncul lagi dari kanan setelah selesai.
+*/
+.text{
+  position:absolute;
+  bottom:-10%; /* mulai di bawah layar */
+  left:50%;
+  transform:translate(-50%,0) rotate(-10deg)(-6deg); /* sedikit kemiringan */
+  font-weight:900;
   font-size:var(--size);
+  color:var(--text);
   text-transform:uppercase;
-  letter-spacing:0.06em;
+  letter-spacing:0.02em;
+  text-shadow:0 6px 18px rgba(0,0,0,0.6);
   white-space:nowrap;
-  transform:translateY(100%); /* mulai dari kanan luar layar */
-  animation:slide var(--speed) linear infinite; /* forwards agar tetap pada posisi akhir (hilang) */
+  animation:rise-then-slide var(--speed) linear infinite;
   will-change:transform,opacity;
-  text-shadow:0 2px 8px rgba(0,0,0,0.6);
 }
 
-@keyframes slide{
+@keyframes rise-then-slide{
   0%{
-    transform:translate( -50%, 120% ); /* mulai dari bawah + agak ke kiri */
+    transform:translate(-50%,120%) rotate(-10deg);
+    opacity:0;
+  }
+
+  20%{
     opacity:1;
   }
+
   100%{
-    transform:translate( 50%, -120% ); /* bergerak miring ke atas kanan */
+    transform:translate(-50%, -140%) rotate(-10deg);
     opacity:1;
   }
 }
-  100%{transform:translateY(-100%);opacity:1}
-}
-  100%{transform:translateY(-100%);opacity:1}
-}
-  80%{opacity:1}
-  100%{transform:translateY(-100%);opacity:0}
+
+  /* sampai --rise%: naik ke posisi target (tengah-atas), tetap terlihat */
+  /* contoh: jika --rise = 30%, maka 30% waktu digunakan untuk fase naik */
+  30%{
+    transform:translate(-50%, -10%) rotate(-6deg);
+    opacity:1;
+  }
+
+  /* akhir fase naik / awal fase slide: tetap di posisi vertikal, mulai geser ke kiri */
+  35%{
+    transform:translate(-50%, -10%) rotate(-6deg);
+    opacity:1;
+  }
+
+  /* 100% - geser keluar ke kiri atas layar */
+  100%{
+    transform:translate(-220%, -140%) rotate(-6deg);
+    opacity:0;
+  }
 }
 
-/* responsif: per kecil layar, naikkan ukuran font relatif */
+/* responsif untuk layar kecil: kurangi ukuran agar muat */
 @media (max-width:420px){
-  :root{--size:10vw}
+  :root{--size:34vw}
 }
-
-.container{max-width:1400px;padding:0 1rem}
 
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Tulisan bergerak: akan bergeser dari kanan ke kiri lalu menghilang -->
-    <div class="marquee-wrap">
-      <div class="marquee-item">HIDUP JOKOWIIII</div>
-    </div>
-  </div>  <!-- Catatan:
-       - Jika ingin teks berulang (loop), ganti "animation: ... forwards" menjadi "animation: ... linear infinite" dan sesuaikan keyframes.
-       - Untuk mempercepat atau memperlambat ubah --speed di :root.
-       - Untuk membuat beberapa kalimat muncul berurutan, bisa tambahkan elemen .marquee-item dan beri delay animation menggunakan style="animation-delay: Xs" pada tiap item.
-  --></body>
+  <div class="wrap">
+    <div class="text">HIDUP JOKOWIIII</div>
+  </div>
+</body>
 </html>
