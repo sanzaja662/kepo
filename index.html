@@ -7,12 +7,30 @@
   <title>Tulisan Bergerak - Merah di Latar Hitam</title>
   <style>
     :root{
-      --bg:#000000;       /* warna latar */
+      --bg:#000000; /* hitam pekat */       /* warna latar */
       --text:#ff2b2b;      /* warna tulisan merah */
-      --speed:3s;         /* durasi animasi (lebih kecil = lebih cepat) */
-      --size:6vw;         /* ukuran font (responsif) */
+      --speed:3s; /* durasi 3 detik */         /* durasi animasi (lebih kecil = lebih cepat) */
+      --size:12vw; /* diperlebar untuk ukuran HP */         /* ukuran font (responsif) */
       --padding:2vh;      /* jarak vertikal */
-    }html,body{height:100%;margin:0}
+    }html,body{
+  background:var(--bg);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-family:system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  -webkit-font-smoothing:antialiased;
+  color:var(--text);
+  position:relative;
+}
+
+body::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:#000000; /* overlay hitam pekat */
+  opacity:1;
+  z-index:-1;
+}
 body{
   background:var(--bg);
   display:flex;
@@ -64,10 +82,13 @@ body{
 </head>
 <body>
   <div class="container">
-    <!-- Tulisan bergerak: akan bergeser dari kanan ke kiri lalu menghilang
+    <!-- Tulisan bergerak: akan bergeser dari kanan ke kiri lalu menghilang -->
     <div class="marquee-wrap">
       <div class="marquee-item">HIDUP JOKOWIIII</div>
     </div>
-  </div>
+  </div>  <!-- Catatan:
+       - Jika ingin teks berulang (loop), ganti "animation: ... forwards" menjadi "animation: ... linear infinite" dan sesuaikan keyframes.
+       - Untuk mempercepat atau memperlambat ubah --speed di :root.
+       - Untuk membuat beberapa kalimat muncul berurutan, bisa tambahkan elemen .marquee-item dan beri delay animation menggunakan style="animation-delay: Xs" pada tiap item.
   --></body>
 </html>
