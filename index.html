@@ -10,7 +10,7 @@
       --bg:#000000; /* hitam pekat */       /* warna latar */
       --text:#ff2b2b;      /* warna tulisan merah */
       --speed:3s; /* durasi 3 detik */         /* durasi animasi (lebih kecil = lebih cepat) */
-      --size:12vw; /* diperlebar untuk ukuran HP */         /* ukuran font (responsif) */
+      --size:18vw; /* ukuran lebih besar */ /* diperlebar untuk ukuran HP */         /* ukuran font (responsif) */
       --padding:2vh;      /* jarak vertikal */
     }html,body{
   background:var(--bg);
@@ -57,18 +57,20 @@ body{
   text-transform:uppercase;
   letter-spacing:0.06em;
   white-space:nowrap;
-  transform:translateX(100%); /* mulai dari kanan luar layar */
+  transform:translateY(100%); /* mulai dari kanan luar layar */
   animation:slide var(--speed) linear infinite; /* forwards agar tetap pada posisi akhir (hilang) */
   will-change:transform,opacity;
   text-shadow:0 2px 8px rgba(0,0,0,0.6);
 }
 
 @keyframes slide{
-  0%{transform:translateX(100%);opacity:1}
-  100%{transform:translateX(-100%);opacity:1}
+  0%{transform:translateY(100%);opacity:1}
+  100%{transform:translateY(-100%);opacity:1}
+}
+  100%{transform:translateY(-100%);opacity:1}
 }
   80%{opacity:1}
-  100%{transform:translateX(-100%);opacity:0}
+  100%{transform:translateY(-100%);opacity:0}
 }
 
 /* responsif: per kecil layar, naikkan ukuran font relatif */
