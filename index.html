@@ -4,14 +4,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Tulisan Bergerak - Hitam Pekat &amp; Miring</title>
+  <title>Tulisan Vertikal Naik - HIDUP JOKOWIIII</title>
   <style>
     :root{
-      --bg:#000000;        /* hitam pekat */
-      --text:#ff2b2b;       /* merah */
-      --speed:3s;          /* durasi total satu siklus */
-      --rise:30%;          /* proporsi durasi untuk fase naik */
-      --size:28vw;         /* ukuran font (besar untuk HP) */
+      --bg:#000000;    /* hitam pekat */
+      --text:#ff2b2b;   /* warna teks merah */
+      --size:20vw;     /* ukuran setiap huruf */
+      --speed:3s;      /* durasi satu siklus naik */
+      --gap:0.1em;     /* jarak antar huruf */
     }html,body{height:100%;margin:0}
 body{
   background:var(--bg);
@@ -25,82 +25,58 @@ body{
   overflow:hidden;
 }
 
-/* overlay hitam pekat memastikan kontras maksimal */
-body::before{
-  content:"";
-  position:absolute;inset:0;
-  background:#000;opacity:1;z-index:-1;
-}
+body::before{content:"";position:absolute;inset:0;background:#000;opacity:1;z-index:-1}
 
-.wrap{width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
+/* wadah untuk teks vertikal */
+.vertical-wrap{width:100%;height:100%;display:flex;align-items:flex-end;justify-content:center;pointer-events:none}
 
-/* elemen teks tunggal yang menjalankan dua fase:
-   1) muncul dari bawah dan naik ke area tampilan (fase naik)
-   2) setelah naik, bergerak ke kiri melintas layar (fase horizontal)
-   animasi di-set infinite sehingga akan muncul lagi dari kanan setelah selesai.
-*/
-.text{
-  position:absolute;
-  bottom:-10%; /* mulai di bawah layar */
-  left:50%;
-  transform:translate(-50%,0) rotate(-10deg)(-6deg); /* sedikit kemiringan */
+.vertical{
+  display:flex;
+  flex-direction:column; /* susun huruf dari atas ke bawah */
+  gap:var(--gap);
+  align-items:center;
   font-weight:900;
   font-size:var(--size);
   color:var(--text);
-  text-transform:uppercase;
-  letter-spacing:0.02em;
-  text-shadow:0 6px 18px rgba(0,0,0,0.6);
+  line-height:0.9;
   white-space:nowrap;
-  animation:rise-then-slide var(--speed) linear infinite;
-  will-change:transform,opacity;
+  transform-origin:center;
+  animation:rise var(--speed) linear infinite;
+  text-shadow:0 6px 18px rgba(0,0,0,0.45);
 }
 
-@keyframes rise-then-slide{
-  0%{
-    transform:translate(-50%,120%) rotate(-10deg);
-    opacity:0;
-  }
+/* setiap huruf dalam <span> tetap tegak (normal) */
+.vertical span{display:block}
 
-  20%{
-    opacity:1;
-  }
-
-  100%{
-    transform:translate(-50%, -140%) rotate(-10deg);
-    opacity:1;
-  }
+@keyframes rise{
+  0%{transform:translateY(120%)}     /* mulai dari bawah layar */
+  100%{transform:translateY(-120%)}  /* naik melewati atas layar */
 }
 
-  /* sampai --rise%: naik ke posisi target (tengah-atas), tetap terlihat */
-  /* contoh: jika --rise = 30%, maka 30% waktu digunakan untuk fase naik */
-  30%{
-    transform:translate(-50%, -10%) rotate(-6deg);
-    opacity:1;
-  }
-
-  /* akhir fase naik / awal fase slide: tetap di posisi vertikal, mulai geser ke kiri */
-  35%{
-    transform:translate(-50%, -10%) rotate(-6deg);
-    opacity:1;
-  }
-
-  /* 100% - geser keluar ke kiri atas layar */
-  100%{
-    transform:translate(-220%, -140%) rotate(-6deg);
-    opacity:0;
-  }
-}
-
-/* responsif untuk layar kecil: kurangi ukuran agar muat */
-@media (max-width:420px){
-  :root{--size:34vw}
-}
+/* responsive untuk layar kecil */
+@media (max-width:420px){:root{--size:30vw}}
 
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="text">HIDUP JOKOWIIII</div>
+  <div class="vertical-wrap">
+    <div class="vertical" aria-hidden="false">
+      <!-- tulis huruf satu-per-satu, urutan normal (atas ke bawah) -->
+      <span>H</span>
+      <span>I</span>
+      <span>D</span>
+      <span>U</span>
+      <span>P</span>
+      <span> </span>
+      <span>J</span>
+      <span>O</span>
+      <span>K</span>
+      <span>O</span>
+      <span>W</span>
+      <span>I</span>
+      <span>I</span>
+      <span>I</span>
+    </div>
   </div>
 </body>
 </html>
